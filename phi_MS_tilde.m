@@ -9,7 +9,8 @@ T=mod(T,2*pi);
 al = a0*exp(l*s_rho);
 sx=2*N*al;
 sy=N*al;
-theta = 2*pi/N_theta*theta_i;
+s_theta = 2*pi/N_theta;
+theta = s_theta*theta_i;
 Rot = [cos(theta), -sin(theta); sin(theta), cos(theta)];
 S = Rot*[1/sx^2,0;0,1/sy^2]*Rot';
 Gaussian = 1/2/pi/sx/sy*exp(-0.5*(X.^2*S(1,1)+Y.^2*S(2,2)+2*X.*Y*S(1,2)));
@@ -18,7 +19,7 @@ Gaussian = Gaussian * al*al;
 %imshow(Gaussian,[])
 cX = floor(length(x)/2)+1;
 cY = floor(length(x)/2)+1;
-A = bspline((mod(T-theta, 2*pi)-pi/2)/s_rho);
+A = bspline((mod(T-theta, 2*pi)-pi/2)/s_theta);
 A(cX,cY)=1/N_theta;
 B0k = bspline(log(R.*al)/s_rho);
 B0k(cX,cY)=0;
@@ -29,8 +30,8 @@ B0k(cX,cY)=0;
 %end
 f = A.*B0k;
 phi = cifft2(f);
-%result = phi/al;
-result = Gaussian.*phi/al;
+%result = phi;
+result = Gaussian.*phi;%/al;
 fourier = cfft2(result);
 % figure(1)
 % imshow(Gaussian,[])
