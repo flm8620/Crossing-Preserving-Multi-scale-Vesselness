@@ -38,7 +38,7 @@
 	The input image can also be reconstructed from its orientation score if the wavelet has good properties. Since this is not used in this paper, I will not talk about it.
 	
 	\subsection{Interpretation in Fourier domain}
-	Convolution of an image with a wavelet equals to multiple their Fourier transformation. Rotating in space domain also corresponds to rotating in frequency domain. The Fourier transform of an anisotropic wavelet is a function preferring certain orientation at frequency domain.
+	Convolution of an image with a wavelet is equivalent to multiple their Fourier transformation. Rotating in space domain also corresponds to rotating in frequency domain. The Fourier transform of an anisotropic wavelet is a function preferring certain orientation at frequency domain.
 	
 	So from my point of view, combining all these above, orientation score can be interpreted as selecting components of an image in its frequency domain with preference at certain orientation. And the region of selection is the support set of wavelet's Fourier transform. This selection region in frequency domain rotates around origin swiping many Fourier components of this image. Each slice of orientation score at angle $\theta$ : $U_f(\cdot,\theta)$ is a selection of Fourier components in image. And if the support of Fourier transform of image is fully covered by the swiping of wavelet's Fourier support, then all components of image are captures, thus the input image can be reconstructed from orientation score.
 	
@@ -90,15 +90,28 @@
 	\end{equation}
 	where $M(\boldsymbol{\omega}) = N_\rho^{-1} N_\theta^{-1} \sum_{l}\sum_{j} |\mathcal{F}[\tilde{\psi}^{MS}_{jl}](\boldsymbol{\omega})|$
 	
-	The some example of final wavelets $\psi^{MS}_{jl}$ is shown in Fig \ref{fig:wavelet}
+	Some example of final wavelets $\psi^{MS}_{jl}$ is shown in Fig \ref{fig:wavelet}
 	\begin{figure}[h]
 		\centering
 		\missingfigure[figwidth=6cm]{Testing a long text string}
 		\caption{Some wavelet in space and frequency domain.}
 		\label{fig:wavelet}
 	\end{figure}
+
+	Once the wavelets is ready, scale-orientation score can be simply constructed by multipling the Fourier transform of image by the Fourier of all wavelets, giving a 4D image at last.
+
+	\section{Vesselness filtering}
+	The vesselness filtering part is basically the same as Frangi's method \cite{frangi1998multiscale}. For each point in the 3D orientation score at one scale, we evaluate the Hessian. To avoid the problem of aliasing when we derive image, we take a convolution with a Gaussian kernel on image. This is equivalent to convolve the image with the derivative of Gaussian kernel.
+	
+	But taking the convolution and derivation in group $SE(2)$ is not trivial. We need to make sure that our operator is left-invariant for the lie group $SE(2)$. This left-invarience property requires the derivation direction must rotate together with the angle $\theta$, and the convolution kernel is twisted along $\theta$. 
+	
+	Since this part is a natural extension of previous method, and left-invariant operator is not trivial to implement, I didn't implement this part in my matlab code.
+	
 	
 	\section{Implementation detail}
+	I implemented the cake kernel in matlab. The code is available online at \href{https://github.com/flm8620/Crossing-Preserving-Multi-scale-Vesselness}{my github}. All operations involving Fourier transform can be implemented by Discret Fourier transform. The different is a scaling constant, which can be ignored because the inverse transform will cancel it out.
+	
+	I took a image of size 1025*1025. I select 5 scales from $a_0=0.002$ to $a_4=10$. And 12 orientation is taken. I use order 2 B-spline with support in interval $[-1.5, 1.5]$
 
 \bibliographystyle{unsrt}
 \bibliography{sample}
