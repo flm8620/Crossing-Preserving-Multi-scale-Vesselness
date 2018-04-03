@@ -64,7 +64,7 @@
 	
 	\begin{figure}[h]
 		\centering
-		\missingfigure[figwidth=6cm]{Testing a long text string}
+		\includegraphics[width=12cm]{scales.png}
 		\caption{Partition of unit in radius of frequency domain}
 		\label{fig:Bkl}
 	\end{figure}
@@ -93,8 +93,8 @@
 	Some example of final wavelets $\psi^{MS}_{jl}$ is shown in Fig \ref{fig:wavelet}
 	\begin{figure}[h]
 		\centering
-		\missingfigure[figwidth=6cm]{Testing a long text string}
-		\caption{Some wavelet in space and frequency domain.}
+		\includegraphics[width=12cm]{wavelets.png}
+		\caption{Three wavelets in space (up) and frequency (bottom) domain.}
 		\label{fig:wavelet}
 	\end{figure}
 
@@ -111,8 +111,17 @@
 	\section{Implementation detail}
 	I implemented the cake kernel in matlab. The code is available online at \href{https://github.com/flm8620/Crossing-Preserving-Multi-scale-Vesselness}{my github}. All operations involving Fourier transform can be implemented by Discret Fourier transform. The different is a scaling constant, which can be ignored because the inverse transform will cancel it out.
 	
-	I took a image of size 1025*1025. I select 5 scales from $a_0=0.002$ to $a_4=10$. And 12 orientation is taken. I use order 2 B-spline with support in interval $[-1.5, 1.5]$
-
+	I took a image of size 1025*1025. I select 5 scales from $a_0=0.002$ to $a_4=10$. And 12 orientations are taken. I use order-2 B-spline function with support in interval $[-1.5, 1.5]$. So there are in total 5*12 = 60 wavelets.
+	
+	I create one test image as shown in Fig \ref{fig:score}. Three slices of scale-orientation score are also shown. This three slice correspond the convolution result with three wavelets in Fig \ref{fig:wavelet}.
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=12cm]{scores.png}
+		\caption{Three slice of scale-orientation scale of one test image, corresponding to three wavelet in Fig \ref{fig:wavelet}}
+		\label{fig:score}
+	\end{figure}
+	We can see from Fig \ref{fig:score} that the response of score is specific to particular orientation and scale.
 \bibliographystyle{unsrt}
 \bibliography{sample}
 \end{document}
